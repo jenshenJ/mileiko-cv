@@ -3,6 +3,8 @@
 Одностраничный CV-лендинг на Astro: русская версия на `/`, английская на `/en/`.
 Статический HTML, рукописный CSS, самохостинговые шрифты, почти без JavaScript.
 
+Живёт на [mileiko-cv.vercel.app](https://mileiko-cv.vercel.app).
+
 ## Стек
 
 - Astro 7 + TypeScript
@@ -40,10 +42,13 @@ public/
 
 ## Деплой на Vercel
 
-1. Создать репозиторий на GitHub и запушить `main`.
-2. На [vercel.com](https://vercel.com) — **Add New → Project → Import** репозитория.
-3. Framework Preset определится как **Astro**, менять команды не нужно.
-4. Deploy.
+Проект `mileiko-cv` связан с репозиторием
+[github.com/jenshenJ/mileiko-cv](https://github.com/jenshenJ/mileiko-cv):
+каждый пуш в `main` собирается и выкатывается в продакшен автоматически.
+Pull request’ы получают preview-деплои.
+
+Первый деплой: `npx vercel --prod`. Локальная папка привязана к проекту
+через `.vercel/` (в git не попадает).
 
 `vercel.json` фиксирует framework, build command и output directory.
 Домен для canonical, hreflang и OG-картинок берётся из
