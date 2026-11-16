@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Profile from '../components/Profile.astro';
+import Experience from '../components/Experience.astro';
+import Project from '../components/Project.astro';
+import Skills from '../components/Skills.astro';
+import Education from '../components/Education.astro';
+import Contact from '../components/Contact.astro';
+import { cv, type Locale } from '../data/cv';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const content = cv[locale];
+---
+
+<Base content={content} locale={locale}>
+  <main id="main">
+    <Hero content={content} />
+    <Profile content={content} />
+    <Experience content={content} />
+    <Project content={content} />
+    <Skills content={content} />
+    <Education content={content} />
+  </main>
+  <Contact content={content} />
+</Base>

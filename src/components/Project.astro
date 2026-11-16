@@ -1,0 +1,73 @@
+---
+import type { CvContent } from '../data/cv';
+
+interface Props {
+  content: CvContent;
+}
+
+const { content } = Astro.props;
+const { project } = content;
+const year = project.specs.find((spec) => spec.label === 'Год' || spec.label === 'Year')?.value;
+---
+
+<section class="section" id="project">
+  <div class="wrap section-grid">
+    <div class="section-head">
+      <span class="section-index">{project.index}</span>
+      <h2 class="section-title">{project.title}</h2>
+      <span class="section-note">PWA · {year}</span>
+    </div>
+
+    <div class="section-body" data-reveal>
+      <div class="project-grid">
+        <div class="project-visual">
+          <span class="project-kicker">PWA / {year}</span>
+          <span class="project-wordmark">{project.name}</span>
+          <p class="project-tagline">{project.tagline}</p>
+        </div>
+
+        <div class="project-info">
+          <p class="project-description">{project.description}</p>
+
+          <ul class="project-bullets">
+            {project.bullets.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+
+          <dl class="project-specs">
+            {project.specs.map((spec) => (
+              <div>
+                <dt>{spec.label}</dt>
+                <dd>
+                  {spec.href ? (
+                    <a href={spec.href} target="_blank" rel="noreferrer">
+                      {spec.value}
+                    </a>
+                  ) : (
+                    spec.value
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          <p class="project-stack">
+            <span>{project.stackLabel}</span>
+            {project.stack}
+          </p>
+
+          <a
+            class="arrow-link"
+            href={project.linkHref}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {project.linkLabel}
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

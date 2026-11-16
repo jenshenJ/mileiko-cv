@@ -1,0 +1,120 @@
+---
+import '@fontsource-variable/golos-text';
+import '@fontsource-variable/literata';
+import '@fontsource-variable/literata/wght-italic.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '../styles/global.css';
+
+import Header from '../components/Header.astro';
+import type { CvContent, Locale } from '../data/cv';
+import { shared } from '../data/cv';
+
+interface Props {
+  content: CvContent;
+  locale: Locale;
+}
+
+const { content, locale } = Astro.props;
+const site = Astro.site;
+const canonical = site ? new URL(Astro.url.pathname, site) : null;
+const ogPath = locale === 'ru' ? '/og-ru.png' : '/og-en.png';
+const ogImage = site ? new URL(ogPath, site).href : ogPath;
+const ogAlt =
+  locale === 'ru'
+    ? 'Евгений Милейко — Fullstack-разработчик'
+    : 'Evgeny Mileiko — Fullstack Developer';
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: locale === 'ru' ? 'Евгений Милейко' : 'Evgeny Mileiko',
+  jobTitle: content.hero.role,
+  email: `mailto:${shared.email}`,
+  url: canonical?.href,
+  sameAs: [shared.github, shared.telegram],
+  worksFor: {
+    '@type': 'Organization',
+    name: 'The Open Platform',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Minsk',
+    addressCountry: 'BY',
+  },
+  knowsLanguage: ['ru', 'be', 'en'],
+};
+---
+
+<!doctype html>
+<html lang={content.meta.lang} data-locale={content.meta.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f3f0e8" />
+
+    <title>{content.meta.title}</title>
+    <meta name="description" content={content.meta.description} />
+    <meta name="author" content={locale === 'ru' ? 'Евгений Милейко' : 'Evgeny Mileiko'} />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {
+      site && (
+        <>
+          <link rel="alternate" hreflang="ru" href={new URL('/', site)} />
+          <link rel="alternate" hreflang="en" href={new URL('/en/', site)} />
+          <link rel="alternate" hreflang="x-default" href={new URL('/', site)} />
+        </>
+      )
+    }
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={content.meta.title} />
+    <meta property="og:description" content={content.meta.description} />
+    <meta property="og:locale" content={content.meta.ogLocale} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={content.meta.title} />
+    <meta name="twitter:description" content={content.meta.description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogAlt} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">{content.nav.skip}</a>
+    <Header content={content} locale={locale} />
+    <slot />
+
+    <script is:inline>
+      (() => {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        if (!reduceMotion.matches && 'IntersectionObserver' in window) {
+          document.documentElement.classList.add('js');
+          const observer = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('is-in');
+                  observer.unobserve(entry.target);
+                }
+              }
+            },
+            { rootMargin: '0px 0px -6% 0px', threshold: 0.05 },
+          );
+
+          document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
+        }
+      })();
+    </script>
+  </body>
+</html>

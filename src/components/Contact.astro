@@ -1,0 +1,49 @@
+---
+import type { CvContent } from '../data/cv';
+
+interface Props {
+  content: CvContent;
+}
+
+const { content } = Astro.props;
+const { contact } = content;
+---
+
+<footer class="contact" id="contact">
+  <div class="wrap">
+    <div class="contact-head">
+      <span class="contact-index">{contact.index}</span>
+      <span>{contact.title}</span>
+    </div>
+
+    <h2 class="contact-title">
+      {contact.heading} <em>{contact.headingEm}</em>.
+    </h2>
+
+    <a class="contact-email" href={`mailto:${contact.email}`}>
+      <span>{contact.email}</span>
+      <span class="contact-email-arrow" aria-hidden="true">↗</span>
+    </a>
+
+    <p class="contact-note">{contact.note}</p>
+
+    <div class="contact-links">
+      {contact.links.map((link) => (
+        <a
+          href={link.href}
+          target={link.href.startsWith('http') ? '_blank' : undefined}
+          rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
+        >
+          <span class="contact-link-label">{link.label}</span>
+          <span class="contact-link-value">{link.value}</span>
+        </a>
+      ))}
+    </div>
+
+    <div class="contact-bottom">
+      <span>{contact.copyright}</span>
+      <span>{contact.location}</span>
+      <a class="contact-top" href="#top">{contact.top} ↑</a>
+    </div>
+  </div>
+</footer>

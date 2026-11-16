@@ -1,0 +1,34 @@
+---
+import type { CvContent } from '../data/cv';
+import { rich } from '../lib/rich';
+
+interface Props {
+  content: CvContent;
+}
+
+const { content } = Astro.props;
+const { profile } = content;
+---
+
+<section class="section" id="profile">
+  <div class="wrap section-grid">
+    <div class="section-head">
+      <span class="section-index">{profile.index}</span>
+      <h2 class="section-title">{profile.title}</h2>
+    </div>
+
+    <div class="section-body" data-reveal>
+      <p class="profile-lead" set:html={rich(profile.lead)} />
+      <p class="profile-body">{profile.body}</p>
+
+      <dl class="profile-facts">
+        {profile.facts.map((fact) => (
+          <div>
+            <dt>{fact.label}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>

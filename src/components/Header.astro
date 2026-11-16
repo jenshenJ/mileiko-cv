@@ -1,0 +1,36 @@
+---
+import type { CvContent, Locale } from '../data/cv';
+
+interface Props {
+  content: CvContent;
+  locale: Locale;
+}
+
+const { content, locale } = Astro.props;
+const switchAria = locale === 'ru' ? 'English version' : 'Русская версия';
+---
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top" aria-label={content.nav.brandAria}>
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>{locale === 'ru' ? 'Евгений Милейко' : 'Evgeny Mileiko'}</span>
+    </a>
+
+    <nav class="nav" aria-label={content.nav.aria}>
+      {content.nav.items.map((item) => (
+        <a href={item.href}>{item.label}</a>
+      ))}
+    </nav>
+
+    <a
+      class="lang"
+      href={content.nav.switchHref}
+      hreflang={content.nav.switchLang}
+      lang={content.nav.switchLang}
+      aria-label={switchAria}
+    >
+      {content.nav.switchLabel}
+    </a>
+  </div>
+</header>
